@@ -35,7 +35,7 @@ export function DeleteTransactionDialog({ transaction, open, onOpenChange, onTra
         onOpenChange(false);
       }
     } catch (error) {
-      console.error('Error deleting transaction:', error);
+      console.error('Error al eliminar transacción:', error);
     } finally {
       setLoading(false);
     }
@@ -47,9 +47,9 @@ export function DeleteTransactionDialog({ transaction, open, onOpenChange, onTra
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Delete Transaction</DialogTitle>
+          <DialogTitle>Eliminar Transacción</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete this ${transaction.amount.toFixed(2)} transaction for {transaction.client_name}? This action cannot be undone.
+            ¿Estás seguro de que quieres eliminar esta transacción de {transaction.amount.toFixed(2).replace('.', ',')}€ para {transaction.client_name}? Esta acción no se puede deshacer.
           </DialogDescription>
         </DialogHeader>
 
@@ -60,7 +60,7 @@ export function DeleteTransactionDialog({ transaction, open, onOpenChange, onTra
             onClick={() => onOpenChange(false)}
             disabled={loading}
           >
-            Cancel
+            Cancelar
           </Button>
           <Button 
             type="button" 
@@ -68,7 +68,7 @@ export function DeleteTransactionDialog({ transaction, open, onOpenChange, onTra
             onClick={handleDelete}
             disabled={loading}
           >
-            {loading ? 'Deleting...' : 'Delete Transaction'}
+            {loading ? 'Eliminando...' : 'Eliminar Transacción'}
           </Button>
         </div>
       </DialogContent>

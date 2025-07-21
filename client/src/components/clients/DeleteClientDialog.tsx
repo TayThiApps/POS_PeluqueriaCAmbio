@@ -35,11 +35,11 @@ export function DeleteClientDialog({ client, open, onOpenChange, onClientDeleted
         onOpenChange(false);
       } else {
         const data = await response.json();
-        setError(data.error || 'Failed to delete client');
+        setError(data.error || 'Error al eliminar cliente');
       }
     } catch (error) {
-      console.error('Error deleting client:', error);
-      setError('Failed to delete client');
+      console.error('Error al eliminar cliente:', error);
+      setError('Error al eliminar cliente');
     } finally {
       setLoading(false);
     }
@@ -51,9 +51,9 @@ export function DeleteClientDialog({ client, open, onOpenChange, onClientDeleted
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Delete Client</DialogTitle>
+          <DialogTitle>Eliminar Cliente</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete "{client.name}"? This action cannot be undone.
+            ¿Estás seguro de que quieres eliminar a "{client.name}"? Esta acción no se puede deshacer.
           </DialogDescription>
         </DialogHeader>
         
@@ -70,7 +70,7 @@ export function DeleteClientDialog({ client, open, onOpenChange, onClientDeleted
             onClick={() => onOpenChange(false)}
             disabled={loading}
           >
-            Cancel
+            Cancelar
           </Button>
           <Button 
             type="button" 
@@ -78,7 +78,7 @@ export function DeleteClientDialog({ client, open, onOpenChange, onClientDeleted
             onClick={handleDelete}
             disabled={loading}
           >
-            {loading ? 'Deleting...' : 'Delete Client'}
+            {loading ? 'Eliminando...' : 'Eliminar Cliente'}
           </Button>
         </div>
       </DialogContent>

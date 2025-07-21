@@ -33,7 +33,7 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
       const data = await response.json();
       setClients(data);
     } catch (error) {
-      console.error('Error fetching clients:', error);
+      console.error('Error al obtener clientes:', error);
     }
   };
 
@@ -63,7 +63,7 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
         onTransactionAdded();
       }
     } catch (error) {
-      console.error('Error creating transaction:', error);
+      console.error('Error al crear transacción:', error);
     } finally {
       setLoading(false);
     }
@@ -72,15 +72,15 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>New Sale</CardTitle>
+        <CardTitle>Nueva Venta</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="client">Client</Label>
+            <Label htmlFor="client">Cliente</Label>
             <Select value={selectedClientId} onValueChange={setSelectedClientId}>
               <SelectTrigger>
-                <SelectValue placeholder="Select a client" />
+                <SelectValue placeholder="Seleccionar cliente" />
               </SelectTrigger>
               <SelectContent>
                 {clients.map((client) => (
@@ -93,24 +93,24 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="amount">Amount ($)</Label>
+            <Label htmlFor="amount">Importe (€)</Label>
             <Input
               id="amount"
               type="number"
               step="0.01"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="0.00"
+              placeholder="0,00"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description (optional)</Label>
+            <Label htmlFor="description">Descripción (opcional)</Label>
             <Input
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Service or product description"
+              placeholder="Descripción del servicio o producto"
             />
           </div>
 
@@ -119,7 +119,7 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
             className="w-full"
             disabled={loading || !selectedClientId || !amount}
           >
-            {loading ? 'Adding Sale...' : 'Add Sale'}
+            {loading ? 'Añadiendo Venta...' : 'Añadir Venta'}
           </Button>
         </form>
       </CardContent>

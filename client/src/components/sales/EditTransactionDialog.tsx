@@ -55,7 +55,7 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
       const data = await response.json();
       setClients(data);
     } catch (error) {
-      console.error('Error fetching clients:', error);
+      console.error('Error al obtener clientes:', error);
     }
   };
 
@@ -83,7 +83,7 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
         onOpenChange(false);
       }
     } catch (error) {
-      console.error('Error updating transaction:', error);
+      console.error('Error al actualizar transacción:', error);
     } finally {
       setLoading(false);
     }
@@ -95,14 +95,14 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit Transaction</DialogTitle>
+          <DialogTitle>Editar Transacción</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="edit-client">Client</Label>
+            <Label htmlFor="edit-client">Cliente</Label>
             <Select value={clientId} onValueChange={setClientId}>
               <SelectTrigger>
-                <SelectValue placeholder="Select a client" />
+                <SelectValue placeholder="Seleccionar cliente" />
               </SelectTrigger>
               <SelectContent>
                 {clients.map((client) => (
@@ -115,30 +115,30 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-amount">Amount ($)</Label>
+            <Label htmlFor="edit-amount">Importe (€)</Label>
             <Input
               id="edit-amount"
               type="number"
               step="0.01"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="0.00"
+              placeholder="0,00"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-description">Description</Label>
+            <Label htmlFor="edit-description">Descripción</Label>
             <Input
               id="edit-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Service or product description"
+              placeholder="Descripción del servicio o producto"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-date">Date</Label>
+            <Label htmlFor="edit-date">Fecha</Label>
             <Input
               id="edit-date"
               type="date"
@@ -150,10 +150,10 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
 
           <div className="flex gap-2 justify-end">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading || !clientId || !amount}>
-              {loading ? 'Updating...' : 'Update Transaction'}
+              {loading ? 'Actualizando...' : 'Actualizar Transacción'}
             </Button>
           </div>
         </form>

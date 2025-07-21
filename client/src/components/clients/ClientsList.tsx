@@ -31,7 +31,7 @@ export function ClientsList() {
       const data = await response.json();
       setClients(data);
     } catch (error) {
-      console.error('Error fetching clients:', error);
+      console.error('Error al obtener clientes:', error);
     } finally {
       setLoading(false);
     }
@@ -56,17 +56,17 @@ export function ClientsList() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleDateString('es-ES');
   };
 
   if (loading) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>All Clients</CardTitle>
+          <CardTitle>Todos los Clientes</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center text-muted-foreground">Loading...</div>
+          <div className="text-center text-muted-foreground">Cargando...</div>
         </CardContent>
       </Card>
     );
@@ -76,22 +76,22 @@ export function ClientsList() {
     <>
       <Card>
         <CardHeader>
-          <CardTitle>All Clients ({clients.length})</CardTitle>
+          <CardTitle>Todos los Clientes ({clients.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {clients.length === 0 ? (
             <div className="text-center text-muted-foreground py-8">
-              No clients added yet
+              No se han añadido clientes aún
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Added Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead>Teléfono</TableHead>
+                  <TableHead>Correo</TableHead>
+                  <TableHead>Fecha de Alta</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -108,14 +108,14 @@ export function ClientsList() {
                           size="sm"
                           onClick={() => handleEditClient(client)}
                         >
-                          Edit
+                          Editar
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteClient(client)}
                         >
-                          Delete
+                          Eliminar
                         </Button>
                       </div>
                     </TableCell>

@@ -22,7 +22,7 @@ export function DailyTotal() {
       const data = await response.json();
       setDailyTotal(data);
     } catch (error) {
-      console.error('Error fetching daily total:', error);
+      console.error('Error al obtener total diario:', error);
     } finally {
       setLoading(false);
     }
@@ -32,10 +32,10 @@ export function DailyTotal() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Today's Sales</CardTitle>
+          <CardTitle>Ventas de Hoy</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center text-muted-foreground">Loading...</div>
+          <div className="text-center text-muted-foreground">Cargando...</div>
         </CardContent>
       </Card>
     );
@@ -44,19 +44,19 @@ export function DailyTotal() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Today's Sales</CardTitle>
+        <CardTitle>Ventas de Hoy</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="text-center">
           <div className="text-3xl font-bold text-green-600">
-            ${dailyTotal?.total?.toFixed(2) || '0.00'}
+            {dailyTotal?.total?.toFixed(2).replace('.', ',') || '0,00'}€
           </div>
           <div className="text-sm text-muted-foreground">
-            {dailyTotal?.count || 0} transactions
+            {dailyTotal?.count || 0} transacciones
           </div>
         </div>
         <div className="text-xs text-muted-foreground text-center">
-          {new Date().toLocaleDateString()}
+          {new Date().toLocaleDateString('es-ES')}
         </div>
       </CardContent>
     </Card>

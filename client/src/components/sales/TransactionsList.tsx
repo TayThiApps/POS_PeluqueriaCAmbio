@@ -33,7 +33,7 @@ export function TransactionsList() {
       const data = await response.json();
       setTransactions(data);
     } catch (error) {
-      console.error('Error fetching transactions:', error);
+      console.error('Error al obtener transacciones:', error);
     } finally {
       setLoading(false);
     }
@@ -58,17 +58,17 @@ export function TransactionsList() {
   };
 
   const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString();
+    return new Date(dateString).toLocaleTimeString('es-ES');
   };
 
   if (loading) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Today's Transactions</CardTitle>
+          <CardTitle>Transacciones de Hoy</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center text-muted-foreground">Loading...</div>
+          <div className="text-center text-muted-foreground">Cargando...</div>
         </CardContent>
       </Card>
     );
@@ -78,22 +78,22 @@ export function TransactionsList() {
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Today's Transactions</CardTitle>
+          <CardTitle>Transacciones de Hoy</CardTitle>
         </CardHeader>
         <CardContent>
           {transactions.length === 0 ? (
             <div className="text-center text-muted-foreground py-8">
-              No transactions today
+              No hay transacciones hoy
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Time</TableHead>
-                  <TableHead>Client</TableHead>
-                  <TableHead>Description</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>Hora</TableHead>
+                  <TableHead>Cliente</TableHead>
+                  <TableHead>Descripción</TableHead>
+                  <TableHead className="text-right">Importe</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -103,7 +103,7 @@ export function TransactionsList() {
                     <TableCell>{transaction.client_name}</TableCell>
                     <TableCell>{transaction.description || '-'}</TableCell>
                     <TableCell className="text-right font-medium">
-                      ${transaction.amount.toFixed(2)}
+                      {transaction.amount.toFixed(2).replace('.', ',')}€
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-2 justify-end">
@@ -112,14 +112,14 @@ export function TransactionsList() {
                           size="sm"
                           onClick={() => handleEditTransaction(transaction)}
                         >
-                          Edit
+                          Editar
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteTransaction(transaction)}
                         >
-                          Delete
+                          Eliminar
                         </Button>
                       </div>
                     </TableCell>

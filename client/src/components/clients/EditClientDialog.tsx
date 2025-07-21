@@ -55,7 +55,7 @@ export function EditClientDialog({ client, open, onOpenChange, onClientUpdated }
         onOpenChange(false);
       }
     } catch (error) {
-      console.error('Error updating client:', error);
+      console.error('Error al actualizar cliente:', error);
     } finally {
       setLoading(false);
     }
@@ -67,48 +67,48 @@ export function EditClientDialog({ client, open, onOpenChange, onClientUpdated }
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit Client</DialogTitle>
+          <DialogTitle>Editar Cliente</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="edit-name">Name *</Label>
+            <Label htmlFor="edit-name">Nombre *</Label>
             <Input
               id="edit-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Client name"
+              placeholder="Nombre del cliente"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-phone">Phone</Label>
+            <Label htmlFor="edit-phone">Teléfono</Label>
             <Input
               id="edit-phone"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="Phone number"
+              placeholder="Número de teléfono"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-email">Email</Label>
+            <Label htmlFor="edit-email">Correo Electrónico</Label>
             <Input
               id="edit-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email address"
+              placeholder="Dirección de correo"
             />
           </div>
 
           <div className="flex gap-2 justify-end">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={loading || !name.trim()}>
-              {loading ? 'Updating...' : 'Update Client'}
+              {loading ? 'Actualizando...' : 'Actualizar Cliente'}
             </Button>
           </div>
         </form>

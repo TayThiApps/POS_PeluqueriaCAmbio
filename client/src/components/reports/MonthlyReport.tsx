@@ -18,18 +18,18 @@ export function MonthlyReport() {
   const [loading, setLoading] = React.useState(false);
 
   const months = [
-    { value: '1', label: 'January' },
-    { value: '2', label: 'February' },
-    { value: '3', label: 'March' },
-    { value: '4', label: 'April' },
-    { value: '5', label: 'May' },
-    { value: '6', label: 'June' },
-    { value: '7', label: 'July' },
-    { value: '8', label: 'August' },
-    { value: '9', label: 'September' },
-    { value: '10', label: 'October' },
-    { value: '11', label: 'November' },
-    { value: '12', label: 'December' },
+    { value: '1', label: 'Enero' },
+    { value: '2', label: 'Febrero' },
+    { value: '3', label: 'Marzo' },
+    { value: '4', label: 'Abril' },
+    { value: '5', label: 'Mayo' },
+    { value: '6', label: 'Junio' },
+    { value: '7', label: 'Julio' },
+    { value: '8', label: 'Agosto' },
+    { value: '9', label: 'Septiembre' },
+    { value: '10', label: 'Octubre' },
+    { value: '11', label: 'Noviembre' },
+    { value: '12', label: 'Diciembre' },
   ];
 
   const years = Array.from({ length: 5 }, (_, i) => {
@@ -48,7 +48,7 @@ export function MonthlyReport() {
       const data = await response.json();
       setReportData(data);
     } catch (error) {
-      console.error('Error fetching monthly report:', error);
+      console.error('Error al obtener informe mensual:', error);
     } finally {
       setLoading(false);
     }
@@ -61,12 +61,12 @@ export function MonthlyReport() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Monthly Report</CardTitle>
+        <CardTitle>Informe Mensual</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-2">
-            <Label>Month</Label>
+            <Label>Mes</Label>
             <Select value={selectedMonth} onValueChange={setSelectedMonth}>
               <SelectTrigger>
                 <SelectValue />
@@ -82,7 +82,7 @@ export function MonthlyReport() {
           </div>
 
           <div className="space-y-2">
-            <Label>Year</Label>
+            <Label>Año</Label>
             <Select value={selectedYear} onValueChange={setSelectedYear}>
               <SelectTrigger>
                 <SelectValue />
@@ -99,14 +99,14 @@ export function MonthlyReport() {
         </div>
 
         {loading ? (
-          <div className="text-center text-muted-foreground">Loading...</div>
+          <div className="text-center text-muted-foreground">Cargando...</div>
         ) : (
           <div className="text-center space-y-2">
             <div className="text-2xl font-bold text-blue-600">
-              ${reportData?.total?.toFixed(2) || '0.00'}
+              {reportData?.total?.toFixed(2).replace('.', ',') || '0,00'}€
             </div>
             <div className="text-sm text-muted-foreground">
-              {reportData?.count || 0} transactions
+              {reportData?.count || 0} transacciones
             </div>
             <div className="text-xs text-muted-foreground">
               {getMonthName(reportData?.month || parseInt(selectedMonth))} {reportData?.year || selectedYear}

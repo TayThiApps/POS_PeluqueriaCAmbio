@@ -39,7 +39,7 @@ export function ClientForm({ onClientAdded }: ClientFormProps) {
         onClientAdded();
       }
     } catch (error) {
-      console.error('Error creating client:', error);
+      console.error('Error al crear cliente:', error);
     } finally {
       setLoading(false);
     }
@@ -48,41 +48,41 @@ export function ClientForm({ onClientAdded }: ClientFormProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add New Client</CardTitle>
+        <CardTitle>Añadir Nuevo Cliente</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div className="space-y-2">
-              <Label htmlFor="name">Name *</Label>
+              <Label htmlFor="name">Nombre *</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Client name"
+                placeholder="Nombre del cliente"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
+              <Label htmlFor="phone">Teléfono</Label>
               <Input
                 id="phone"
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="Phone number"
+                placeholder="Número de teléfono"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">Correo Electrónico</Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email address"
+                placeholder="Dirección de correo"
               />
             </div>
           </div>
@@ -91,7 +91,7 @@ export function ClientForm({ onClientAdded }: ClientFormProps) {
             type="submit" 
             disabled={loading || !name.trim()}
           >
-            {loading ? 'Adding Client...' : 'Add Client'}
+            {loading ? 'Añadiendo Cliente...' : 'Añadir Cliente'}
           </Button>
         </form>
       </CardContent>

@@ -27,7 +27,7 @@ export function DailyReport() {
       const data = await response.json();
       setReportData(data);
     } catch (error) {
-      console.error('Error fetching daily report:', error);
+      console.error('Error al obtener informe diario:', error);
     } finally {
       setLoading(false);
     }
@@ -36,11 +36,11 @@ export function DailyReport() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Daily Report</CardTitle>
+        <CardTitle>Informe Diario</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="date">Select Date</Label>
+          <Label htmlFor="date">Seleccionar Fecha</Label>
           <Input
             id="date"
             type="date"
@@ -50,17 +50,17 @@ export function DailyReport() {
         </div>
 
         {loading ? (
-          <div className="text-center text-muted-foreground">Loading...</div>
+          <div className="text-center text-muted-foreground">Cargando...</div>
         ) : (
           <div className="text-center space-y-2">
             <div className="text-2xl font-bold text-green-600">
-              ${reportData?.total?.toFixed(2) || '0.00'}
+              {reportData?.total?.toFixed(2).replace('.', ',') || '0,00'}€
             </div>
             <div className="text-sm text-muted-foreground">
-              {reportData?.count || 0} transactions
+              {reportData?.count || 0} transacciones
             </div>
             <div className="text-xs text-muted-foreground">
-              {new Date(selectedDate).toLocaleDateString()}
+              {new Date(selectedDate).toLocaleDateString('es-ES')}
             </div>
           </div>
         )}
