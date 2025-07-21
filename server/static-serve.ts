@@ -10,7 +10,7 @@ export function setupStaticServing(app: express.Application) {
   app.use(express.static(path.join(process.cwd(), 'public')));
 
   // For any other routes, serve the index.html file
-  app.get('/{*splat}', (req, res, next) => {
+  app.get('/*splat', (req, res, next) => {
     // Skip API routes
     if (req.path.startsWith('/api/')) {
       return next();
