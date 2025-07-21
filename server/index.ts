@@ -53,6 +53,78 @@ app.post('/api/clients', async (req, res) => {
   }
 });
 
+// Update client
+app.put('/api/clients/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, phone, email } = req.body;
+    console.log('Updating client:', { id, name, phone, email });
+
+    const result = await db
+      .updateTable('clients')
+      .set({
+        name,
+        phone: phone || null,
+        email: email || null,
+      })
+      .where('id', '=', parseInt(id))
+      .executeTakeFirst();
+
+    if (result.numUpdatedRows === 0) {
+      res.status(404).json({ error: 'Client not found' });
+      return;
+    }
+
+    console.log('Updated client with ID:', id);
+    res.json({ id: parseInt(id), name, phone, email });
+    return;
+  } catch (error) {
+    console.error('Error updating client:', error);
+    res.status(500).json({ error: 'Failed to update client' });
+    return;
+  }
+});
+
+// Delete client
+app.delete('/api/clients/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('Deleting client with ID:', id);
+
+    // Check if client has transactions
+    const transactionsCount = await db
+      .selectFrom('transactions')
+      .select(db => db.fn.count('id').as('count'))
+      .where('client_id', '=', parseInt(id))
+      .executeTakeFirst();
+
+    if (transactionsCount && transactionsCount.count > 0) {
+      res.status(400).json({ 
+        error: 'Cannot delete client with existing transactions. Please delete transactions first.' 
+      });
+      return;
+    }
+
+    const result = await db
+      .deleteFrom('clients')
+      .where('id', '=', parseInt(id))
+      .executeTakeFirst();
+
+    if (result.numDeletedRows === 0) {
+      res.status(404).json({ error: 'Client not found' });
+      return;
+    }
+
+    console.log('Deleted client with ID:', id);
+    res.json({ message: 'Client deleted successfully' });
+    return;
+  } catch (error) {
+    console.error('Error deleting client:', error);
+    res.status(500).json({ error: 'Failed to delete client' });
+    return;
+  }
+});
+
 // Get all transactions
 app.get('/api/transactions', async (req, res) => {
   try {
