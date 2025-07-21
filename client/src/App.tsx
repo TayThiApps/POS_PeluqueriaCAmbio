@@ -1,14 +1,24 @@
 import * as React from 'react';
-import { Button } from '@/components/ui/button';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Navigation } from '@/components/navigation/Navigation';
+import { SalesPage } from '@/pages/sales/SalesPage';
+import { ClientsPage } from '@/pages/clients/ClientsPage';
+import { ReportsPage } from '@/pages/reports/ReportsPage';
 
-// Extract the error message
 function App() {
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold">Instance starter</h1>
+    <Router>
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        <main className="container mx-auto px-4 py-6">
+          <Routes>
+            <Route path="/" element={<SalesPage />} />
+            <Route path="/clients" element={<ClientsPage />} />
+            <Route path="/reports" element={<ReportsPage />} />
+          </Routes>
+        </main>
       </div>
-    </div>
+    </Router>
   );
 }
 
