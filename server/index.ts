@@ -136,6 +136,7 @@ app.get('/api/transactions', async (req, res) => {
       .innerJoin('clients', 'transactions.client_id', 'clients.id')
       .select([
         'transactions.id',
+        'transactions.client_id',
         'transactions.amount',
         'transactions.description',
         'transactions.transaction_date',
@@ -185,6 +186,65 @@ app.post('/api/transactions', async (req, res) => {
   } catch (error) {
     console.error('Error creating transaction:', error);
     res.status(500).json({ error: 'Failed to create transaction' });
+    return;
+  }
+});
+
+// Update transaction
+app.put('/api/transactions/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { client_id, amount, description, transaction_date } = req.body;
+    console.log('Updating transaction:', { id, client_id, amount, description, transaction_date });
+
+    const result = await db
+      .updateTable('transactions')
+      .set({
+        client_id,
+        amount,
+        description: description || null,
+        transaction_date: transaction_date || new Date().toISOString(),
+      })
+      .where('id', '=', parseInt(id))
+      .executeTakeFirst();
+
+    if (result.numUpdatedRows === 0) {
+      res.status(404).json({ error: 'Transaction not found' });
+      return;
+    }
+
+    console.log('Updated transaction with ID:', id);
+    res.json({ id: parseInt(id), client_id, amount, description, transaction_date });
+    return;
+  } catch (error) {
+    console.error('Error updating transaction:', error);
+    res.status(500).json({ error: 'Failed to update transaction' });
+    return;
+  }
+});
+
+// Delete transaction
+app.delete('/api/transactions/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('Deleting transaction with ID:', id);
+
+    const result = await db
+      .deleteFrom('transactions')
+      .where('id', '=', parseInt(id))
+      .executeTakeFirst();
+
+    if (result.numDeletedRows === 0) {
+      res.status(404).json({ error: 'Transaction not found' });
+      return;
+    }
+
+    console.log('Deleted transaction with ID:', id);
+    res.json({ message: 'Transaction deleted successfully' });
+    return;
+  } catch (error) {
+    console.error('Error deleting transaction:', error);
+    res.status(500).json({ error: 'Failed to delete transaction' });
     return;
   }
 });
