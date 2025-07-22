@@ -84,16 +84,18 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
   const breakdown = grossAmount ? calculateVatBreakdown(parseFloat(grossAmount) || 0, parseFloat(vatRate)) : null;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Nueva Venta</CardTitle>
+    <Card className="sales-card shadow-lg">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl font-semibold text-purple-800 flex items-center gap-2">
+          ✨ Nueva Venta
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="client">Cliente</Label>
+            <Label htmlFor="client" className="text-purple-700 font-medium">Cliente</Label>
             <Select value={selectedClientId} onValueChange={setSelectedClientId}>
-              <SelectTrigger>
+              <SelectTrigger className="border-purple-200 focus:border-purple-400 focus:ring-purple-200">
                 <SelectValue placeholder="Seleccionar cliente" />
               </SelectTrigger>
               <SelectContent>
@@ -108,7 +110,7 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="grossAmount">Importe Total (€)</Label>
+              <Label htmlFor="grossAmount" className="text-purple-700 font-medium">Importe Total (€)</Label>
               <Input
                 id="grossAmount"
                 type="number"
@@ -116,13 +118,14 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
                 value={grossAmount}
                 onChange={(e) => setGrossAmount(e.target.value)}
                 placeholder="0,00"
+                className="border-purple-200 focus:border-purple-400 focus:ring-purple-200"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="vatRate">Tipo IVA (%)</Label>
+              <Label htmlFor="vatRate" className="text-purple-700 font-medium">Tipo IVA (%)</Label>
               <Select value={vatRate} onValueChange={setVatRate}>
-                <SelectTrigger>
+                <SelectTrigger className="border-purple-200 focus:border-purple-400 focus:ring-purple-200">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -136,17 +139,19 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
           </div>
 
           {breakdown && (
-            <div className="bg-muted p-3 rounded-md space-y-1 text-sm">
-              <div className="font-medium">Desglose IVA:</div>
-              <div className="flex justify-between">
-                <span>Base imponible:</span>
-                <span>{breakdown.net.toFixed(2).replace('.', ',')}€</span>
+            <div className="vat-breakdown p-4 rounded-lg space-y-2 text-sm">
+              <div className="font-medium text-purple-800 flex items-center gap-2">
+                📋 Desglose IVA:
               </div>
               <div className="flex justify-between">
-                <span>IVA ({vatRate}%):</span>
-                <span>{breakdown.vat.toFixed(2).replace('.', ',')}€</span>
+                <span className="text-purple-600">Base imponible:</span>
+                <span className="font-medium">{breakdown.net.toFixed(2).replace('.', ',')}€</span>
               </div>
-              <div className="flex justify-between font-medium border-t pt-1">
+              <div className="flex justify-between">
+                <span className="text-purple-600">IVA ({vatRate}%):</span>
+                <span className="font-medium">{breakdown.vat.toFixed(2).replace('.', ',')}€</span>
+              </div>
+              <div className="flex justify-between font-semibold border-t border-purple-200 pt-2 text-purple-800">
                 <span>Total:</span>
                 <span>{parseFloat(grossAmount).toFixed(2).replace('.', ',')}€</span>
               </div>
@@ -154,21 +159,22 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="description">Descripción (opcional)</Label>
+            <Label htmlFor="description" className="text-purple-700 font-medium">Descripción (opcional)</Label>
             <Input
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Descripción del servicio o producto"
+              className="border-purple-200 focus:border-purple-400 focus:ring-purple-200"
             />
           </div>
 
           <Button 
             type="submit" 
-            className="w-full"
+            className="w-full bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-medium py-2.5 transition-all duration-200 shadow-md hover:shadow-lg"
             disabled={loading || !selectedClientId || !grossAmount}
           >
-            {loading ? 'Añadiendo Venta...' : 'Añadir Venta'}
+            {loading ? '✨ Añadiendo Venta...' : '💫 Añadir Venta'}
           </Button>
         </form>
       </CardContent>

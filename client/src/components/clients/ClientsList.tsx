@@ -61,12 +61,14 @@ export function ClientsList() {
 
   if (loading) {
     return (
-      <Card>
+      <Card className="clients-card shadow-lg">
         <CardHeader>
-          <CardTitle>Todos los Clientes</CardTitle>
+          <CardTitle className="text-purple-800 flex items-center gap-2">
+            👥 Todos los Clientes
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center text-muted-foreground">Cargando...</div>
+          <div className="text-center text-purple-600">Cargando...</div>
         </CardContent>
       </Card>
     );
@@ -74,48 +76,56 @@ export function ClientsList() {
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <CardTitle>Todos los Clientes ({clients.length})</CardTitle>
+      <Card className="clients-card shadow-lg">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-xl font-semibold text-purple-800 flex items-center gap-2">
+            👥 Todos los Clientes ({clients.length})
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {clients.length === 0 ? (
-            <div className="text-center text-muted-foreground py-8">
-              No se han añadido clientes aún
+            <div className="text-center text-purple-600 py-8 bg-purple-50 rounded-lg">
+              🌸 No se han añadido clientes aún
             </div>
           ) : (
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Nombre</TableHead>
-                  <TableHead>Teléfono</TableHead>
-                  <TableHead>Correo</TableHead>
-                  <TableHead>Fecha de Alta</TableHead>
-                  <TableHead className="text-right">Acciones</TableHead>
+                <TableRow className="border-purple-200">
+                  <TableHead className="text-purple-700 font-medium">Nombre</TableHead>
+                  <TableHead className="text-purple-700 font-medium">Teléfono</TableHead>
+                  <TableHead className="text-purple-700 font-medium">Correo</TableHead>
+                  <TableHead className="text-purple-700 font-medium">Fecha de Alta</TableHead>
+                  <TableHead className="text-right text-purple-700 font-medium">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {clients.map((client) => (
-                  <TableRow key={client.id}>
-                    <TableCell className="font-medium">{client.name}</TableCell>
-                    <TableCell>{client.phone || '-'}</TableCell>
-                    <TableCell>{client.email || '-'}</TableCell>
-                    <TableCell>{formatDate(client.created_at)}</TableCell>
+                {clients.map((client, index) => (
+                  <TableRow key={client.id} className={index % 2 === 0 ? 'bg-purple-25' : 'bg-white'}>
+                    <TableCell className="font-semibold text-purple-800">👤 {client.name}</TableCell>
+                    <TableCell className="text-purple-600">
+                      {client.phone ? `📞 ${client.phone}` : '📞 -'}
+                    </TableCell>
+                    <TableCell className="text-purple-600">
+                      {client.email ? `✉️ ${client.email}` : '✉️ -'}
+                    </TableCell>
+                    <TableCell className="text-purple-600">📅 {formatDate(client.created_at)}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-2 justify-end">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleEditClient(client)}
+                          className="border-purple-200 text-purple-600 hover:bg-purple-50 hover:text-purple-700"
                         >
-                          Editar
+                          ✏️ Editar
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteClient(client)}
+                          className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
                         >
-                          Eliminar
+                          🗑️ Eliminar
                         </Button>
                       </div>
                     </TableCell>

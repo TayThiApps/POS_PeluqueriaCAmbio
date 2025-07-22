@@ -46,43 +46,48 @@ export function ClientForm({ onClientAdded }: ClientFormProps) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Añadir Nuevo Cliente</CardTitle>
+    <Card className="clients-card shadow-lg">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl font-semibold text-purple-800 flex items-center gap-2">
+          👤 Añadir Nuevo Cliente
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div className="space-y-2">
-              <Label htmlFor="name">Nombre *</Label>
+              <Label htmlFor="name" className="text-purple-700 font-medium">Nombre *</Label>
               <Input
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Nombre del cliente"
                 required
+                className="border-purple-200 focus:border-purple-400 focus:ring-purple-200"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Teléfono</Label>
+              <Label htmlFor="phone" className="text-purple-700 font-medium">Teléfono</Label>
               <Input
                 id="phone"
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Número de teléfono"
+                className="border-purple-200 focus:border-purple-400 focus:ring-purple-200"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Correo Electrónico</Label>
+              <Label htmlFor="email" className="text-purple-700 font-medium">Correo Electrónico</Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Dirección de correo"
+                className="border-purple-200 focus:border-purple-400 focus:ring-purple-200"
               />
             </div>
           </div>
@@ -90,8 +95,9 @@ export function ClientForm({ onClientAdded }: ClientFormProps) {
           <Button 
             type="submit" 
             disabled={loading || !name.trim()}
+            className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white font-medium py-2.5 transition-all duration-200 shadow-md hover:shadow-lg"
           >
-            {loading ? 'Añadiendo Cliente...' : 'Añadir Cliente'}
+            {loading ? '✨ Añadiendo Cliente...' : '🎉 Añadir Cliente'}
           </Button>
         </form>
       </CardContent>

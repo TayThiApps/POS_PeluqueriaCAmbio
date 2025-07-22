@@ -65,16 +65,18 @@ export function MonthlyReport() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Informe Mensual</CardTitle>
+    <Card className="reports-card shadow-lg">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-lg font-semibold text-purple-800 flex items-center gap-2">
+          📈 Informe Mensual
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">
-            <Label>Mes</Label>
+            <Label className="text-purple-700 font-medium text-sm">Mes</Label>
             <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-              <SelectTrigger>
+              <SelectTrigger className="border-purple-200 focus:border-purple-400 focus:ring-purple-200">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -88,9 +90,9 @@ export function MonthlyReport() {
           </div>
 
           <div className="space-y-2">
-            <Label>Año</Label>
+            <Label className="text-purple-700 font-medium text-sm">Año</Label>
             <Select value={selectedYear} onValueChange={setSelectedYear}>
-              <SelectTrigger>
+              <SelectTrigger className="border-purple-200 focus:border-purple-400 focus:ring-purple-200">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -105,29 +107,29 @@ export function MonthlyReport() {
         </div>
 
         {loading ? (
-          <div className="text-center text-muted-foreground">Cargando...</div>
+          <div className="text-center text-purple-600 py-4">Cargando...</div>
         ) : (
           <div className="space-y-3">
-            <div className="space-y-1 text-sm">
+            <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span>Base imponible:</span>
-                <span>{formatAmount(reportData?.net_total || 0)}</span>
+                <span className="text-purple-600">Base imponible:</span>
+                <span className="font-medium text-purple-800">{formatAmount(reportData?.net_total || 0)}</span>
               </div>
               <div className="flex justify-between">
-                <span>IVA:</span>
-                <span>{formatAmount(reportData?.vat_total || 0)}</span>
+                <span className="text-purple-600">IVA:</span>
+                <span className="font-medium text-purple-800">{formatAmount(reportData?.vat_total || 0)}</span>
               </div>
             </div>
-            <div className="border-t pt-2">
-              <div className="text-center space-y-1">
-                <div className="text-xl font-bold text-blue-600">
+            <div className="border-t border-purple-200 pt-3">
+              <div className="text-center space-y-2">
+                <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   {formatAmount(reportData?.total || 0)}
                 </div>
-                <div className="text-sm text-muted-foreground">
-                  {reportData?.count || 0} transacciones
+                <div className="text-sm text-purple-600 flex items-center justify-center gap-1">
+                  💼 {reportData?.count || 0} transacciones
                 </div>
-                <div className="text-xs text-muted-foreground">
-                  {getMonthName(reportData?.month || parseInt(selectedMonth))} {reportData?.year || selectedYear}
+                <div className="text-xs text-purple-500 bg-purple-50 rounded-md py-1 px-2">
+                  📅 {getMonthName(reportData?.month || parseInt(selectedMonth))} {reportData?.year || selectedYear}
                 </div>
               </div>
             </div>
