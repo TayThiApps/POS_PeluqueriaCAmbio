@@ -22,6 +22,9 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
   const [grossAmount, setGrossAmount] = React.useState('');
   const [vatRate, setVatRate] = React.useState('21');
   const [description, setDescription] = React.useState('');
+  const [transactionDate, setTransactionDate] = React.useState(
+    new Date().toISOString().split('T')[0]
+  );
   const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -63,7 +66,7 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
           amount: parseFloat(grossAmount),
           vat_rate: parseFloat(vatRate),
           description: description || null,
-          transaction_date: new Date().toISOString(),
+          transaction_date: new Date(transactionDate + 'T12:00:00').toISOString(),
         }),
       });
 
@@ -72,6 +75,7 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
         setDescription('');
         setSelectedClientId('');
         setVatRate('21');
+        setTransactionDate(new Date().toISOString().split('T')[0]);
         onTransactionAdded();
       }
     } catch (error) {
@@ -92,20 +96,34 @@ export function TransactionForm({ onTransactionAdded }: TransactionFormProps) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
-            <Label htmlFor="client" className="text-purple-700 font-medium">Cliente</Label>
-            <Select value={selectedClientId} onValueChange={setSelectedClientId}>
-              <SelectTrigger className="border-purple-200 focus:border-purple-400 focus:ring-purple-200">
-                <SelectValue placeholder="Seleccionar cliente" />
-              </SelectTrigger>
-              <SelectContent>
-                {clients.map((client) => (
-                  <SelectItem key={client.id} value={client.id.toString()}>
-                    {client.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="client" className="text-purple-700 font-medium">Cliente</Label>
+              <Select value={selectedClientId} onValueChange={setSelectedClientId}>
+                <SelectTrigger className="border-purple-200 focus:border-purple-400 focus:ring-purple-200">
+                  <SelectValue placeholder="Seleccionar cliente" />
+                </SelectTrigger>
+                <SelectContent>
+                  {clients.map((client) => (
+                    <SelectItem key={client.id} value={client.id.toString()}>
+                      {client.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="transactionDate" className="text-purple-700 font-medium">Fecha de Venta</Label>
+              <Input
+                id="transactionDate"
+                type="date"
+                value={transactionDate}
+                onChange={(e) => setTransactionDate(e.target.value)}
+                max={new Date().toISOString().split('T')[0]}
+                className="border-purple-200 focus:border-purple-400 focus:ring-purple-200"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
