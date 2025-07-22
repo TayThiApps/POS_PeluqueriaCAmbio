@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import * as React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export function Navigation() {
   const location = useLocation();
@@ -14,21 +14,21 @@ export function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center space-x-2">
-            <h1 className="text-xl font-bold">Sistema TPV</h1>
+            <h1 className="text-xl font-bold">Peluquería Cambio</h1>
           </div>
           <div className="flex items-center space-x-4">
             <Link to="/">
-              <Button variant={isActive('/') ? 'default' : 'ghost'}>
+              <Button variant={isActive("/") ? "default" : "ghost"}>
                 Ventas
               </Button>
             </Link>
             <Link to="/clients">
-              <Button variant={isActive('/clients') ? 'default' : 'ghost'}>
+              <Button variant={isActive("/clients") ? "default" : "ghost"}>
                 Clientes
               </Button>
             </Link>
             <Link to="/reports">
-              <Button variant={isActive('/reports') ? 'default' : 'ghost'}>
+              <Button variant={isActive("/reports") ? "default" : "ghost"}>
                 Informes
               </Button>
             </Link>
