@@ -6,6 +6,8 @@ import { Label } from '@/components/ui/label';
 interface YearlyReportData {
   year: number;
   total: number;
+  net_total: number;
+  vat_total: number;
   count: number;
 }
 
@@ -37,6 +39,10 @@ export function YearlyReport() {
     }
   };
 
+  const formatAmount = (amount: number) => {
+    return amount.toFixed(2).replace('.', ',') + '€';
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -62,15 +68,29 @@ export function YearlyReport() {
         {loading ? (
           <div className="text-center text-muted-foreground">Cargando...</div>
         ) : (
-          <div className="text-center space-y-2">
-            <div className="text-2xl font-bold text-purple-600">
-              {reportData?.total?.toFixed(2).replace('.', ',') || '0,00'}€
+          <div className="space-y-3">
+            <div className="space-y-1 text-sm">
+              <div className="flex justify-between">
+                <span>Base imponible:</span>
+                <span>{formatAmount(reportData?.net_total || 0)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>IVA:</span>
+                <span>{formatAmount(reportData?.vat_total || 0)}</span>
+              </div>
             </div>
-            <div className="text-sm text-muted-foreground">
-              {reportData?.count || 0} transacciones
-            </div>
-            <div className="text-xs text-muted-foreground">
-              Año {reportData?.year || selectedYear}
+            <div className="border-t pt-2">
+              <div className="text-center space-y-1">
+                <div className="text-xl font-bold text-purple-600">
+                  {formatAmount(reportData?.total || 0)}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {reportData?.count || 0} transacciones
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Año {reportData?.year || selectedYear}
+                </div>
+              </div>
             </div>
           </div>
         )}

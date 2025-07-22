@@ -15,6 +15,9 @@ export interface DatabaseSchema {
     id: number;
     client_id: number;
     amount: number;
+    net_amount: number | null;
+    vat_rate: number | null;
+    vat_amount: number | null;
     description: string | null;
     transaction_date: string;
     created_at: string;

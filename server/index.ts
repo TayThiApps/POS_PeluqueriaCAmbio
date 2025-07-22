@@ -138,6 +138,9 @@ app.get('/api/transactions', async (req, res) => {
         'transactions.id',
         'transactions.client_id',
         'transactions.amount',
+        'transactions.net_amount',
+        'transactions.vat_rate',
+        'transactions.vat_amount',
         'transactions.description',
         'transactions.transaction_date',
         'clients.name as client_name'
@@ -165,14 +168,21 @@ app.get('/api/transactions', async (req, res) => {
 // Create new transaction
 app.post('/api/transactions', async (req, res) => {
   try {
-    const { client_id, amount, description, transaction_date } = req.body;
-    console.log('Creando nueva transacción:', { client_id, amount, description, transaction_date });
+    const { client_id, amount, description, transaction_date, vat_rate = 21.0 } = req.body;
+    console.log('Creando nueva transacción:', { client_id, amount, description, transaction_date, vat_rate });
+
+    // Calculate VAT breakdown
+    const netAmount = Math.round((amount / (1 + (vat_rate / 100))) * 100) / 100;
+    const vatAmount = Math.round((amount - netAmount) * 100) / 100;
 
     const result = await db
       .insertInto('transactions')
       .values({
         client_id,
         amount,
+        net_amount: netAmount,
+        vat_rate,
+        vat_amount: vatAmount,
         description: description || null,
         transaction_date: transaction_date || new Date().toISOString(),
         created_at: new Date().toISOString()
@@ -181,7 +191,16 @@ app.post('/api/transactions', async (req, res) => {
       .executeTakeFirst();
 
     console.log('Transacción creada con ID:', result?.id);
-    res.json({ id: result?.id, client_id, amount, description, transaction_date });
+    res.json({ 
+      id: result?.id, 
+      client_id, 
+      amount, 
+      net_amount: netAmount,
+      vat_rate,
+      vat_amount: vatAmount,
+      description, 
+      transaction_date 
+    });
     return;
   } catch (error) {
     console.error('Error al crear transacción:', error);
@@ -194,14 +213,21 @@ app.post('/api/transactions', async (req, res) => {
 app.put('/api/transactions/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { client_id, amount, description, transaction_date } = req.body;
-    console.log('Actualizando transacción:', { id, client_id, amount, description, transaction_date });
+    const { client_id, amount, description, transaction_date, vat_rate = 21.0 } = req.body;
+    console.log('Actualizando transacción:', { id, client_id, amount, description, transaction_date, vat_rate });
+
+    // Calculate VAT breakdown
+    const netAmount = Math.round((amount / (1 + (vat_rate / 100))) * 100) / 100;
+    const vatAmount = Math.round((amount - netAmount) * 100) / 100;
 
     const result = await db
       .updateTable('transactions')
       .set({
         client_id,
         amount,
+        net_amount: netAmount,
+        vat_rate,
+        vat_amount: vatAmount,
         description: description || null,
         transaction_date: transaction_date || new Date().toISOString(),
       })
@@ -214,7 +240,16 @@ app.put('/api/transactions/:id', async (req, res) => {
     }
 
     console.log('Transacción actualizada con ID:', id);
-    res.json({ id: parseInt(id), client_id, amount, description, transaction_date });
+    res.json({ 
+      id: parseInt(id), 
+      client_id, 
+      amount, 
+      net_amount: netAmount,
+      vat_rate,
+      vat_amount: vatAmount,
+      description, 
+      transaction_date 
+    });
     return;
   } catch (error) {
     console.error('Error al actualizar transacción:', error);
@@ -260,6 +295,8 @@ app.get('/api/reports/daily', async (req, res) => {
       .selectFrom('transactions')
       .select(db => [
         db.fn.sum('amount').as('total'),
+        db.fn.sum('net_amount').as('net_total'),
+        db.fn.sum('vat_amount').as('vat_total'),
         db.fn.count('id').as('count')
       ])
       .where('transaction_date', 'like', `${targetDate}%`)
@@ -269,6 +306,8 @@ app.get('/api/reports/daily', async (req, res) => {
     res.json({
       date: targetDate,
       total: result?.total || 0,
+      net_total: result?.net_total || 0,
+      vat_total: result?.vat_total || 0,
       count: result?.count || 0
     });
     return;
@@ -294,6 +333,8 @@ app.get('/api/reports/monthly', async (req, res) => {
       .selectFrom('transactions')
       .select(db => [
         db.fn.sum('amount').as('total'),
+        db.fn.sum('net_amount').as('net_total'),
+        db.fn.sum('vat_amount').as('vat_total'),
         db.fn.count('id').as('count')
       ])
       .where('transaction_date', 'like', `${datePrefix}%`)
@@ -304,6 +345,8 @@ app.get('/api/reports/monthly', async (req, res) => {
       year: targetYear,
       month: targetMonth,
       total: result?.total || 0,
+      net_total: result?.net_total || 0,
+      vat_total: result?.vat_total || 0,
       count: result?.count || 0
     });
     return;
@@ -326,6 +369,8 @@ app.get('/api/reports/yearly', async (req, res) => {
       .selectFrom('transactions')
       .select(db => [
         db.fn.sum('amount').as('total'),
+        db.fn.sum('net_amount').as('net_total'),
+        db.fn.sum('vat_amount').as('vat_total'),
         db.fn.count('id').as('count')
       ])
       .where('transaction_date', 'like', `${targetYear}%`)
@@ -335,6 +380,8 @@ app.get('/api/reports/yearly', async (req, res) => {
     res.json({
       year: targetYear,
       total: result?.total || 0,
+      net_total: result?.net_total || 0,
+      vat_total: result?.vat_total || 0,
       count: result?.count || 0
     });
     return;

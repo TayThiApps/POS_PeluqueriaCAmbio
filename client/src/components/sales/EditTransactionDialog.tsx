@@ -14,6 +14,9 @@ interface Transaction {
   id: number;
   client_id: number;
   amount: number;
+  net_amount: number | null;
+  vat_rate: number | null;
+  vat_amount: number | null;
   description: string | null;
   transaction_date: string;
   client_name: string;
@@ -29,7 +32,8 @@ interface EditTransactionDialogProps {
 export function EditTransactionDialog({ transaction, open, onOpenChange, onTransactionUpdated }: EditTransactionDialogProps) {
   const [clients, setClients] = React.useState<Client[]>([]);
   const [clientId, setClientId] = React.useState<string>('');
-  const [amount, setAmount] = React.useState('');
+  const [grossAmount, setGrossAmount] = React.useState('');
+  const [vatRate, setVatRate] = React.useState('21');
   const [description, setDescription] = React.useState('');
   const [transactionDate, setTransactionDate] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -43,7 +47,8 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
   React.useEffect(() => {
     if (transaction) {
       setClientId(transaction.client_id.toString());
-      setAmount(transaction.amount.toString());
+      setGrossAmount(transaction.amount.toString());
+      setVatRate((transaction.vat_rate || 21).toString());
       setDescription(transaction.description || '');
       setTransactionDate(transaction.transaction_date.split('T')[0]);
     }
@@ -59,9 +64,18 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
     }
   };
 
+  const calculateVatBreakdown = (gross: number, vat: number) => {
+    const netAmount = gross / (1 + (vat / 100));
+    const vatAmount = gross - netAmount;
+    return {
+      net: Math.round(netAmount * 100) / 100,
+      vat: Math.round(vatAmount * 100) / 100
+    };
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!transaction || !clientId || !amount) return;
+    if (!transaction || !clientId || !grossAmount) return;
 
     setLoading(true);
     try {
@@ -72,7 +86,8 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
         },
         body: JSON.stringify({
           client_id: parseInt(clientId),
-          amount: parseFloat(amount),
+          amount: parseFloat(grossAmount),
+          vat_rate: parseFloat(vatRate),
           description: description || null,
           transaction_date: new Date(transactionDate + 'T00:00:00').toISOString(),
         }),
@@ -90,6 +105,8 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
   };
 
   if (!transaction) return null;
+
+  const breakdown = grossAmount ? calculateVatBreakdown(parseFloat(grossAmount) || 0, parseFloat(vatRate)) : null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -114,18 +131,53 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-amount">Importe (€)</Label>
-            <Input
-              id="edit-amount"
-              type="number"
-              step="0.01"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="0,00"
-              required
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-grossAmount">Importe Total (€)</Label>
+              <Input
+                id="edit-grossAmount"
+                type="number"
+                step="0.01"
+                value={grossAmount}
+                onChange={(e) => setGrossAmount(e.target.value)}
+                placeholder="0,00"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-vatRate">Tipo IVA (%)</Label>
+              <Select value={vatRate} onValueChange={setVatRate}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">0% (Exento)</SelectItem>
+                  <SelectItem value="4">4% (Superreducido)</SelectItem>
+                  <SelectItem value="10">10% (Reducido)</SelectItem>
+                  <SelectItem value="21">21% (General)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+
+          {breakdown && (
+            <div className="bg-muted p-3 rounded-md space-y-1 text-sm">
+              <div className="font-medium">Desglose IVA:</div>
+              <div className="flex justify-between">
+                <span>Base imponible:</span>
+                <span>{breakdown.net.toFixed(2).replace('.', ',')}€</span>
+              </div>
+              <div className="flex justify-between">
+                <span>IVA ({vatRate}%):</span>
+                <span>{breakdown.vat.toFixed(2).replace('.', ',')}€</span>
+              </div>
+              <div className="flex justify-between font-medium border-t pt-1">
+                <span>Total:</span>
+                <span>{parseFloat(grossAmount).toFixed(2).replace('.', ',')}€</span>
+              </div>
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="edit-description">Descripción</Label>
@@ -152,7 +204,7 @@ export function EditTransactionDialog({ transaction, open, onOpenChange, onTrans
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading || !clientId || !amount}>
+            <Button type="submit" disabled={loading || !clientId || !grossAmount}>
               {loading ? 'Actualizando...' : 'Actualizar Transacción'}
             </Button>
           </div>

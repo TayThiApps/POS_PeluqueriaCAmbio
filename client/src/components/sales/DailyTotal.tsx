@@ -4,6 +4,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 interface DailyTotalData {
   date: string;
   total: number;
+  net_total: number;
+  vat_total: number;
   count: number;
 }
 
@@ -28,6 +30,10 @@ export function DailyTotal() {
     }
   };
 
+  const formatAmount = (amount: number) => {
+    return amount.toFixed(2).replace('.', ',') + '€';
+  };
+
   if (loading) {
     return (
       <Card>
@@ -47,12 +53,24 @@ export function DailyTotal() {
         <CardTitle>Ventas de Hoy</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="text-center">
-          <div className="text-3xl font-bold text-green-600">
-            {dailyTotal?.total?.toFixed(2).replace('.', ',') || '0,00'}€
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span>Base imponible:</span>
+            <span>{formatAmount(dailyTotal?.net_total || 0)}</span>
           </div>
-          <div className="text-sm text-muted-foreground">
-            {dailyTotal?.count || 0} transacciones
+          <div className="flex justify-between text-sm">
+            <span>IVA:</span>
+            <span>{formatAmount(dailyTotal?.vat_total || 0)}</span>
+          </div>
+          <div className="border-t pt-2">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">
+                {formatAmount(dailyTotal?.total || 0)}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {dailyTotal?.count || 0} transacciones
+              </div>
+            </div>
           </div>
         </div>
         <div className="text-xs text-muted-foreground text-center">
