@@ -70,7 +70,7 @@ app.put('/api/clients/:id', async (req, res) => {
       .where('id', '=', parseInt(id))
       .executeTakeFirst();
 
-    if (result.numUpdatedRows === 0) {
+    if (result.numUpdatedRows === BigInt(0)) {
       res.status(404).json({ error: 'Cliente no encontrado' });
       return;
     }
@@ -98,11 +98,12 @@ app.delete('/api/clients/:id', async (req, res) => {
       .where('client_id', '=', parseInt(id))
       .executeTakeFirst();
 
-    if (transactionsCount && transactionsCount.count > 0) {
-      res.status(400).json({ 
-        error: 'No se puede eliminar el cliente con transacciones existentes. Por favor elimina las transacciones primero.' 
-      });
-      return;
+    if (transactionsCount && BigInt(transactionsCount.count) > BigInt(0)) {
+  res.status(400).json({ 
+    error: 'No se puede eliminar el cliente con transacciones existentes. Por favor elimina las transacciones primero.' 
+  });
+  return;
+
     }
 
     const result = await db
@@ -110,7 +111,7 @@ app.delete('/api/clients/:id', async (req, res) => {
       .where('id', '=', parseInt(id))
       .executeTakeFirst();
 
-    if (result.numDeletedRows === 0) {
+    if (result.numDeletedRows === BigInt(0)) {
       res.status(404).json({ error: 'Cliente no encontrado' });
       return;
     }
@@ -234,7 +235,7 @@ app.put('/api/transactions/:id', async (req, res) => {
       .where('id', '=', parseInt(id))
       .executeTakeFirst();
 
-    if (result.numUpdatedRows === 0) {
+    if (result.numUpdatedRows === BigInt(0)) {
       res.status(404).json({ error: 'Transacción no encontrada' });
       return;
     }
@@ -269,7 +270,7 @@ app.delete('/api/transactions/:id', async (req, res) => {
       .where('id', '=', parseInt(id))
       .executeTakeFirst();
 
-    if (result.numDeletedRows === 0) {
+    if (result.numDeletedRows === BigInt(0)) {
       res.status(404).json({ error: 'Transacción no encontrada' });
       return;
     }
