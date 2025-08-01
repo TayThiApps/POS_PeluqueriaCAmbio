@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "vite build && tsc --project tsconfig.server.json",
-    "start": "tsx watch scripts/dev.ts"
+    "start": "tsx watch scripts/dev.ts",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "1.1.3",
